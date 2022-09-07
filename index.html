@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ahorcado</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+</head>
+
+<body onresize="scrrsz()">
+
+    <div id="div_botones mb-10">
+        <button type="button" class="btn btn-primary" id="juegonuevo">Juego Nuevo</button>
+        <button type="button" class="btn btn-dark" id="agregarpalabra">Agregar Palabra</button>
+    </div>
+    <br>
+    <div id="div_canvas" style="display: block">
+        <canvas width="600" height="400" style="border:1px solid black"> </canvas>
+        <br>
+        <input type="text" placeholder="Ingrese letra">
+    </div>
+    <div id="div_palabra" style="display: none">
+        <input type="text" placeholder="Ingrese la palabra">
+        <p>Máximo 8 carácteres</p>
+        <button type="button" class="btn btn-primary" id="ap_nueva">Guardar y Juego Nuevo</button>
+        <button type="button" class="btn btn-danger" id="ap_cancelar">Cancelar</button>
+    </div>
+
+    <script src="./js/control.js">
+    </script>
+</body>
+
+</html>
