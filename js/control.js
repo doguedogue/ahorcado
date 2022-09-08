@@ -4,33 +4,60 @@ const div_canvas = document.getElementById('div_canvas');
 const div_palabra = document.getElementById('div_palabra');
 var pantalla = document.querySelector("canvas");
 var pincel = pantalla.getContext("2d");
-var WIDTH = window.innerWidth;
+var WIDTH = screen.width;
 var HEIGHT = 500;
 var COLOR = "#309694";
-var RADIO = 100;
+const body = document.getElementById('body');
+var gamemode = false;
+
+//start
 scrrsz();
 
-
 function scrrsz() {
-    WIDTH = window.innerWidth;
+    WIDTH = screen.width;
     pantalla.width = WIDTH;
     pantalla.height = HEIGHT;
 
     console.log("Width: " + WIDTH);
     console.log("Height: " + HEIGHT);
     limpiarPantalla();
-    dibujaAhorcado(WIDTH / 2, HEIGHT / 2);
+    dibujaAhorcado(WIDTH / 2 - 50, HEIGHT / 2);
 }
 
 juegonuevo.addEventListener('click', function handleClick() {
     div_canvas.style.display = "block";
     div_palabra.style.display = "none";
-    dibujaAhorcado(WIDTH / 2, HEIGHT / 2);
+    gamemode = true;
+    dibujaAhorcado(WIDTH / 2 - 50, HEIGHT / 2);
 });
 
 agregarpalabra.addEventListener('click', function handleClick() {
     div_canvas.style.display = "none";
     div_palabra.style.display = "block";
+    gamemode = false;
+});
+
+
+document.addEventListener('keydown', e => {
+    if (e.repeat) {
+        e.preventDefault();
+        return;
+    }
+    if (gamemode) {
+        console.log('keypress ' + String.fromCharCode(e.which || e.keyCode));
+
+        switch (String.fromCharCode(e.which || e.keyCode).toUpperCase()) {
+            case "A":
+            case "E":
+            case "I":
+            case "O":
+            case "U":
+                alert("Presionaste una vocal");
+                break;
+            default:
+                alert("Presionaste otra letra que no es vocal");
+        }
+    }
 });
 
 
