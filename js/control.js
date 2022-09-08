@@ -7,7 +7,8 @@ const input_teclado = document.getElementById('input_teclado');
 const desistir = document.getElementById('desistir');
 const ap_cancelar = document.getElementById('ap_cancelar');
 
-var ABECEDARIO = "^[a-zA-Z\u00F1\u00D1]+$";
+// var ABECEDARIO = "^[a-zA-Z\u00F1\u00D1]+$";
+var ABECEDARIO = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
 var pantalla = document.querySelector("canvas");
 var pincel = pantalla.getContext("2d");
 var WIDTH = screen.width;
@@ -16,6 +17,8 @@ var COLOR = "#309694";
 var gamemode = false;
 var ERRORES = 0;
 var PALABRA = "";
+var LETRASACIERTO = "";
+var LETRASERROR = "";
 
 //start
 scrrsz();
@@ -33,7 +36,14 @@ function scrrsz() {
     }
 
     limpiarPantalla();
+    imprimeJuegoActual();
+}
+
+function imprimeJuegoActual() {
     dibujaAhorcado(WIDTH / 2 - 50, HEIGHT / 2);
+    dibujaLetrasAciertos(HEIGHT / 2 + 65);
+    dibujaLetrasErrores(HEIGHT / 2 + 150);
+    dibujaGuionesPalabra(HEIGHT / 2 + 80);
 }
 
 function juegoNuevo() {
@@ -42,10 +52,14 @@ function juegoNuevo() {
     div_canvas.style.display = "block";
     div_palabra.style.display = "none";
     gamemode = true;
+    PALABRA = "";
+    LETRASACIERTO = "";
+    LETRASERROR = "";
+
 
     limpiarPantalla();
     //TODO Palabra aleatoria
-    PALABRA = "AEIOUAEI"
+    PALABRA = "ROPERO".toUpperCase();
     dibujaGuionesPalabra(HEIGHT / 2 + 80);
 
     // dibujaLetrasAciertos(HEIGHT / 2 + 65);
@@ -98,28 +112,26 @@ document.addEventListener('keyup', e => {
         if (input_teclado.value.length > 0)
             letra = input_teclado.value.charAt(0).toUpperCase();
         console.log('keypress ' + letra);
+        // console.log('PALABRA.indexOf(letra)  ' + PALABRA.indexOf(letra));
+        // console.log('LETRASACIERTO.indexOf(letra)  ' + LETRASACIERTO.indexOf(letra));
+        // console.log('LETRASERROR.indexOf(letra)  ' + LETRASERROR.indexOf(letra));
 
         //Se introduce letra
-        if (!letra.match(ABECEDARIO)) {
-            console.log("NO ES UNA LETRA " + letra.match(ABECEDARIO))
+        if (ABECEDARIO.indexOf(letra) == -1) {
+            console.log("NO ES UNA LETRA " + letra);
             input_teclado.value = "";
             return;
+        } else if (PALABRA.indexOf(letra) != -1 && LETRASACIERTO.indexOf(letra) == -1) {
+            LETRASACIERTO += letra;
+            console.log("Esta letra se encuentra en la palabra");
+        } else if (PALABRA.indexOf(letra) == -1 && LETRASERROR.indexOf(letra) == -1) {
+            ERRORES += 1;
+            LETRASERROR += letra;
+            console.log("Presionaste una letra que no se encuentra | ERRORES: " + ERRORES);
         }
 
-        switch (letra) {
-            case "A":
-            case "E":
-            case "I":
-            case "O":
-            case "U":
-                console.log("Presionaste una vocal");
-                break;
-            default:
-                ERRORES += 1;
-                console.log("Presionaste otra letra que no es vocal | ERRORES: " + ERRORES);
-        }
         input_teclado.value = "";
-        dibujaAhorcado(WIDTH / 2 - 50, HEIGHT / 2);
+        imprimeJuegoActual();
     }
 });
 
@@ -145,7 +157,6 @@ function dibujaAhorcado(x, y) {
         pincel.moveTo(x, y);
         pincel.lineTo(x, y - 200);
         pincel.stroke();
-        console.log("Entro aqui cuando hay 2 errores");
     }
 
     if (ERRORES > 2) {
@@ -214,7 +225,7 @@ function dibujaAhorcado(x, y) {
 }
 
 function dibujaLetrasAciertos(y) {
-    pincel.fillStyle = "black";
+    pincel.fillStyle = "#18EC3F";
     pincel.lineWidth = 5;
     const font_size = 48;
     pincel.font = `${font_size}px Georgia`;
@@ -223,9 +234,8 @@ function dibujaLetrasAciertos(y) {
 
     const padding = 20;
     const espacios = 10;
-    let leng_guiones = (WIDTH - (2 * padding) - espacios * (PALABRA.length - 1)) / PALABRA.length;
-    // console.log("longitud espacios: " + leng_guiones);
-    x = 0;
+    let leng_guiones = 36;
+    x = WIDTH / 2 - (2 * padding) / 2 - (espacios * (PALABRA.length - 1)) / 2 - (leng_guiones * PALABRA.length) / 2;
 
     for (let index = 0; index < PALABRA.length; index++) {
         if (index == 0) x += padding;
@@ -234,44 +244,59 @@ function dibujaLetrasAciertos(y) {
 
         const pm = x + leng_guiones / 2 - font_size / 2 + espacios;
 
-        console.log("pm: " + pm);
-        console.log("y: " + y);
+        // console.log("pm: " + pm);
+        // console.log("y: " + y);
 
         x += leng_guiones;
-
-        pincel.fillText("8", pm, y);
+        // console.log("dibAciertos LETRASACIERTO: " + LETRASACIERTO);
+        // console.log("dibAciertos PALABRA.charAt(index): " + PALABRA.charAt(index));
+        // console.log("dibAciertos LETRASACIERTO.indexOf(PALABRA.charAt(index)): " + LETRASACIERTO.indexOf(PALABRA.charAt(index)));
+        if (LETRASACIERTO.indexOf(PALABRA.charAt(index)) != -1) {
+            pincel.fillText(PALABRA.charAt(index), pm, y);
+            console.log("imprimiendo letra: " + PALABRA.charAt(index));
+        }
     }
 
 }
 
 function dibujaLetrasErrores(y) {
+    const font_size = 32;
+    pincel.font = `${font_size}px Georgia`;
+
+    limpiarPantallaParcial(0, y - font_size, WIDTH, y + font_size);
+
     pincel.fillStyle = "red";
     pincel.lineWidth = 5;
-    const font_size = 36;
-    pincel.font = `${font_size}px Georgia`;
 
     pincel.beginPath();
 
-    const padding = 20;
-    const espacios = 10;
-    let leng_guiones = (WIDTH - (2 * padding) - espacios * (PALABRA.length - 1)) / PALABRA.length;
-    console.log("longitud espacios: " + leng_guiones);
-    x = 0;
+    const padding = 5;
+    const espacios = 5;
+    let leng_guiones = 32;
+    x = WIDTH / 2 - (2 * padding) / 2 - (espacios * (LETRASERROR.length - 1)) / 2 - (leng_guiones * LETRASERROR.length) / 2;
 
-    for (let index = 0; index < PALABRA.length; index++) {
+
+    for (let index = 0; index < LETRASERROR.length; index++) {
         if (index == 0) x += padding;
         else x += espacios;
 
 
-        const pm = x + leng_guiones / 2 - font_size / 2 + espacios;
+        const pm = x + leng_guiones / 2 - font_size / 2 - espacios;
 
-        console.log("pm: " + pm);
-        console.log("y: " + y);
+        // console.log("pm: " + pm);
+        // console.log("y: " + y);
 
         x += leng_guiones;
 
-        pincel.fillText("8", pm, y);
+        pincel.fillText(LETRASERROR.charAt(index), pm, y);
     }
+}
+
+function limpiarPantallaParcial(x1, y1, x2, y2) {
+    pincel.clearRect(x1, y1, x2, y2);
+    pincel.fillStyle = COLOR;
+    pincel.fillRect(x1, y1, x2, y2);
+
 }
 
 
@@ -282,9 +307,9 @@ function dibujaGuionesPalabra(y) {
 
     const padding = 20;
     const espacios = 10;
-    let leng_guiones = (WIDTH - (2 * padding) - espacios * (PALABRA.length - 1)) / PALABRA.length;
-    // console.log("longitud espacios: " + leng_guiones);
-    x = 0;
+    let leng_guiones = 36;
+
+    x = WIDTH / 2 - (2 * padding) / 2 - (espacios * (PALABRA.length - 1)) / 2 - (leng_guiones * PALABRA.length) / 2;
 
     for (let index = 0; index < PALABRA.length; index++) {
         if (index == 0) x += padding;
