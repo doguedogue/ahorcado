@@ -6,9 +6,10 @@ var pantalla = document.querySelector("canvas");
 var pincel = pantalla.getContext("2d");
 var WIDTH = window.innerWidth;
 var HEIGHT = 500;
-var COLOR = "#048434";
+var COLOR = "#309694";
 var RADIO = 100;
 scrrsz();
+
 
 function scrrsz() {
     WIDTH = window.innerWidth;
@@ -16,6 +17,7 @@ function scrrsz() {
     pantalla.height = HEIGHT;
 
     console.log("Width: " + WIDTH);
+    console.log("Height: " + HEIGHT);
     limpiarPantalla();
     dibujaAhorcado(WIDTH / 2, HEIGHT / 2);
 }
@@ -34,15 +36,60 @@ agregarpalabra.addEventListener('click', function handleClick() {
 
 function dibujaAhorcado(x, y) {
     console.log("x: " + x);
-    pincel.fillStyle = "black";
-    pincel.beginPath();
-    pincel.arc(x, y, RADIO, 0, 2 * Math.PI);
-    pincel.fill();
+    console.log("y: " + y);
 
-    pincel.fillStyle = "red";
+    pincel.fillStyle = "black";
+    pincel.lineWidth = 10;
+
+    //0 base
+    pincel.moveTo(x - 50, y);
+    pincel.lineTo(x + 150, y);
+    pincel.stroke();
+
+    //1 poste
+    pincel.moveTo(x, y);
+    pincel.lineTo(x, y - 200);
+    pincel.stroke();
+
+    //2 barra
+    pincel.moveTo(x - 5, y - 200);
+    pincel.lineTo(x + 100, y - 200);
+    pincel.stroke();
+
+    //3 cuerda
+    pincel.moveTo(x + 100, y - 200 - 5);
+    pincel.lineTo(x + 100, y - 160);
+    pincel.stroke();
+
+    //4 cabeza
     pincel.beginPath();
-    pincel.arc(x, y, 10, 0, 2 * Math.PI);
-    pincel.fill();
+    pincel.arc(x + 100, y - 160 + 20, 20, 0, 2 * Math.PI);
+    pincel.stroke();
+
+    //5 tronco
+    pincel.moveTo(x + 100, y - 120);
+    pincel.lineTo(x + 100, y - 50);
+    pincel.stroke();
+
+    //6 brazo izq
+    pincel.moveTo(x + 100, y - 120);
+    pincel.lineTo(x + 70, y - 120 + 30);
+    pincel.stroke();
+
+    //7 brazo der
+    pincel.moveTo(x + 100, y - 120);
+    pincel.lineTo(x + 130, y - 120 + 30);
+    pincel.stroke();
+
+    //8 pie izq
+    pincel.moveTo(x + 100, y - 50 - 5);
+    pincel.lineTo(x + 70, y - 50 + 30);
+    pincel.stroke();
+
+    //9 pie der
+    pincel.moveTo(x + 100, y - 50 - 5);
+    pincel.lineTo(x + 130, y - 50 + 30);
+    pincel.stroke();
 
     // pincel.font = `${RADIO}px Georgia`;
     // pincel.fillStyle = "black";
