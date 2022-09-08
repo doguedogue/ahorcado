@@ -11,19 +11,21 @@
 
 <body onresize="scrrsz()">
 
-    <div id=" div_botones mb-10">
+    <div id="div_botones" class="">
         <button type="button" class="btn btn-primary" id="juegonuevo">Juego Nuevo</button>
         <button type="button" class="btn btn-dark" id="agregarpalabra">Agregar Palabra</button>
     </div>
-    <br>
-    <div id="div_canvas" style="display: block">
-        <canvas width="600" height="400" style="border:1px solid black"> </canvas>
+    <div id="div_canvas" style="display: none">
+        <canvas width="600" height="400" style="border:1px solid lightseagreen"> </canvas>
         <br>
         <input type="text" class="form-control form-control-lg" id="input_teclado" style="display: none"
             placeholder="Presiona aquí para sacar el teclado">
+        <button type="button" class="btn btn-primary" id="juegonuevo2">Juego Nuevo</button>
+        <button type="button" class="btn btn-dark" id="desistir">Desistir</button>
     </div>
     <div id="div_palabra" style="display: none">
-        <input type="text" placeholder="Ingrese la palabra">
+        <textarea type="text" class="form-control form-control-lg" id="palabra" placeholder="Ingrese palabra nueva"
+            style="resize: none;height: 300px;"></textarea>
         <p>Máximo 8 carácteres</p>
         <button type="button" class="btn btn-primary" id="ap_nueva">Guardar y Juego Nuevo</button>
         <button type="button" class="btn btn-danger" id="ap_cancelar">Cancelar</button>
