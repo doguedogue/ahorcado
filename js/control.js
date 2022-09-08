@@ -7,6 +7,7 @@ const input_teclado = document.getElementById('input_teclado');
 const desistir = document.getElementById('desistir');
 const ap_cancelar = document.getElementById('ap_cancelar');
 
+var ABECEDARIO = "^[a-zA-Z\u00F1\u00D1]+$";
 var pantalla = document.querySelector("canvas");
 var pincel = pantalla.getContext("2d");
 var WIDTH = screen.width;
@@ -14,6 +15,7 @@ var HEIGHT = 420;
 var COLOR = "#309694";
 var gamemode = false;
 var ERRORES = 0;
+var PALABRA = "";
 
 //start
 scrrsz();
@@ -40,7 +42,15 @@ function juegoNuevo() {
     div_canvas.style.display = "block";
     div_palabra.style.display = "none";
     gamemode = true;
+
     limpiarPantalla();
+    //TODO Palabra aleatoria
+    PALABRA = "AEIOUAEI"
+    dibujaGuionesPalabra(HEIGHT / 2 + 80);
+
+    // dibujaLetrasAciertos(HEIGHT / 2 + 65);
+    // dibujaLetrasErrores(HEIGHT / 2 + 150);
+
     dibujaAhorcado(WIDTH / 2 - 50, HEIGHT / 2);
 }
 
@@ -82,7 +92,19 @@ document.addEventListener('keyup', e => {
     }
     if (gamemode) {
         let letra = String.fromCharCode(e.which || e.keyCode).toUpperCase();
+        if (e.keyCode == 192) {
+            letra = "Ñ";
+        }
+        if (input_teclado.value.length > 0)
+            letra = input_teclado.value.charAt(0).toUpperCase();
         console.log('keypress ' + letra);
+
+        //Se introduce letra
+        if (!letra.match(ABECEDARIO)) {
+            console.log("NO ES UNA LETRA " + letra.match(ABECEDARIO))
+            input_teclado.value = "";
+            return;
+        }
 
         switch (letra) {
             case "A":
@@ -103,8 +125,8 @@ document.addEventListener('keyup', e => {
 
 
 function dibujaAhorcado(x, y) {
-    console.log("x: " + x);
-    console.log("y: " + y);
+    // console.log("x: " + x);
+    // console.log("y: " + y);
 
     pincel.fillStyle = "black";
     pincel.lineWidth = 10;
@@ -189,10 +211,93 @@ function dibujaAhorcado(x, y) {
         pincel.stroke();
 
     }
+}
 
-    // pincel.font = `${RADIO}px Georgia`;
-    // pincel.fillStyle = "black";
-    // pincel.fillText("8", x - (radio / 3), y + (radio / 3));
+function dibujaLetrasAciertos(y) {
+    pincel.fillStyle = "black";
+    pincel.lineWidth = 5;
+    const font_size = 48;
+    pincel.font = `${font_size}px Georgia`;
+
+    pincel.beginPath();
+
+    const padding = 20;
+    const espacios = 10;
+    let leng_guiones = (WIDTH - (2 * padding) - espacios * (PALABRA.length - 1)) / PALABRA.length;
+    // console.log("longitud espacios: " + leng_guiones);
+    x = 0;
+
+    for (let index = 0; index < PALABRA.length; index++) {
+        if (index == 0) x += padding;
+        else x += espacios;
+
+
+        const pm = x + leng_guiones / 2 - font_size / 2 + espacios;
+
+        console.log("pm: " + pm);
+        console.log("y: " + y);
+
+        x += leng_guiones;
+
+        pincel.fillText("8", pm, y);
+    }
+
+}
+
+function dibujaLetrasErrores(y) {
+    pincel.fillStyle = "red";
+    pincel.lineWidth = 5;
+    const font_size = 36;
+    pincel.font = `${font_size}px Georgia`;
+
+    pincel.beginPath();
+
+    const padding = 20;
+    const espacios = 10;
+    let leng_guiones = (WIDTH - (2 * padding) - espacios * (PALABRA.length - 1)) / PALABRA.length;
+    console.log("longitud espacios: " + leng_guiones);
+    x = 0;
+
+    for (let index = 0; index < PALABRA.length; index++) {
+        if (index == 0) x += padding;
+        else x += espacios;
+
+
+        const pm = x + leng_guiones / 2 - font_size / 2 + espacios;
+
+        console.log("pm: " + pm);
+        console.log("y: " + y);
+
+        x += leng_guiones;
+
+        pincel.fillText("8", pm, y);
+    }
+}
+
+
+function dibujaGuionesPalabra(y) {
+    pincel.fillStyle = "black";
+    pincel.lineWidth = 5;
+    pincel.beginPath();
+
+    const padding = 20;
+    const espacios = 10;
+    let leng_guiones = (WIDTH - (2 * padding) - espacios * (PALABRA.length - 1)) / PALABRA.length;
+    // console.log("longitud espacios: " + leng_guiones);
+    x = 0;
+
+    for (let index = 0; index < PALABRA.length; index++) {
+        if (index == 0) x += padding;
+        else x += espacios;
+
+        // console.log("x: " + x + "x2: " + (x + leng_guiones));
+        // console.log("y: " + y);
+
+        pincel.moveTo(x, y);
+        x += leng_guiones;
+        pincel.lineTo(x, y);
+        pincel.stroke();
+    }
 }
 
 function limpiarPantalla() {
