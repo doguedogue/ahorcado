@@ -19,6 +19,7 @@ var ERRORES = 0;
 var PALABRA = "";
 var LETRASACIERTO = "";
 var LETRASERROR = "";
+var GANASTE = false;
 
 //start
 scrrsz();
@@ -48,6 +49,7 @@ function imprimeJuegoActual() {
 
 function juegoNuevo() {
     ERRORES = 0;
+    GANASTE = false;
     div_botones.style.display = "none";
     div_canvas.style.display = "block";
     div_palabra.style.display = "none";
@@ -117,8 +119,7 @@ document.addEventListener('keyup', e => {
         // console.log('LETRASERROR.indexOf(letra)  ' + LETRASERROR.indexOf(letra));
 
         //Se introduce letra
-        if (ABECEDARIO.indexOf(letra) == -1) {
-            console.log("NO ES UNA LETRA " + letra);
+        if (GANASTE || ERRORES >= 10 || ABECEDARIO.indexOf(letra) == -1) {
             input_teclado.value = "";
             return;
         } else if (PALABRA.indexOf(letra) != -1 && LETRASACIERTO.indexOf(letra) == -1) {
@@ -132,6 +133,11 @@ document.addEventListener('keyup', e => {
 
         input_teclado.value = "";
         imprimeJuegoActual();
+        if (ERRORES == 10) {
+            console.log("Perdiste!")
+        } else if (GANASTE) {
+            console.log("Ganaste!")
+        }
     }
 });
 
@@ -237,6 +243,7 @@ function dibujaLetrasAciertos(y) {
     let leng_guiones = 36;
     x = WIDTH / 2 - (2 * padding) / 2 - (espacios * (PALABRA.length - 1)) / 2 - (leng_guiones * PALABRA.length) / 2;
 
+    GANASTE = true;
     for (let index = 0; index < PALABRA.length; index++) {
         if (index == 0) x += padding;
         else x += espacios;
@@ -253,7 +260,8 @@ function dibujaLetrasAciertos(y) {
         // console.log("dibAciertos LETRASACIERTO.indexOf(PALABRA.charAt(index)): " + LETRASACIERTO.indexOf(PALABRA.charAt(index)));
         if (LETRASACIERTO.indexOf(PALABRA.charAt(index)) != -1) {
             pincel.fillText(PALABRA.charAt(index), pm, y);
-            console.log("imprimiendo letra: " + PALABRA.charAt(index));
+        } else {
+            GANASTE = false;
         }
     }
 
