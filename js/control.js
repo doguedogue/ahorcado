@@ -8,6 +8,8 @@ const desistir = document.getElementById('desistir');
 const ap_cancelar = document.getElementById('ap_cancelar');
 const ap_nueva = document.getElementById('ap_nueva');
 const footer = document.getElementById('footer');
+const palabra = document.getElementById('palabra');
+
 
 var ABECEDARIO = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
 var pantalla = document.querySelector("canvas");
@@ -112,7 +114,13 @@ juegonuevo.addEventListener('click', function handleClick() {
 });
 
 ap_nueva.addEventListener('click', function handleClick() {
-    alert("Palabra Guardada Correctamente!");
+    if (palabra.value.length > 8) {
+        alert("La palabra debe tener los 8 carácteres!");
+        return;
+    } else {
+        alert("Palabra '" + palabra.value + "' Guardada Correctamente!");
+    }
+    palabra.value = "";
     juegoNuevo();
 });
 
@@ -285,7 +293,7 @@ function dibujaLetrasAciertos(y) {
     let leng_guiones = 36;
     x = WIDTH / 2 - (2 * padding) / 2 - (espacios * (PALABRA.length - 1)) / 2 - (leng_guiones * PALABRA.length) / 2;
 
-    GANASTE = true;
+    let verdaderos = 0;
     for (let index = 0; index < PALABRA.length; index++) {
         if (index == 0) x += padding;
         else x += espacios;
@@ -302,11 +310,10 @@ function dibujaLetrasAciertos(y) {
         // console.log("dibAciertos LETRASACIERTO.indexOf(PALABRA.charAt(index)): " + LETRASACIERTO.indexOf(PALABRA.charAt(index)));
         if (LETRASACIERTO.indexOf(PALABRA.charAt(index)) != -1) {
             pincel.fillText(PALABRA.charAt(index), pm, y);
-        } else {
-            GANASTE = false;
+            verdaderos++;
         }
     }
-
+    GANASTE = (PALABRA.length > 0 && verdaderos == PALABRA.length);
 }
 
 function dibujaLetrasResultado(y, texto_resultado, color) {
