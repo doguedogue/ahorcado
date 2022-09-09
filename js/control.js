@@ -7,6 +7,7 @@ const input_teclado = document.getElementById('input_teclado');
 const desistir = document.getElementById('desistir');
 const ap_cancelar = document.getElementById('ap_cancelar');
 const ap_nueva = document.getElementById('ap_nueva');
+const footer = document.getElementById('footer');
 
 var ABECEDARIO = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
 var pantalla = document.querySelector("canvas");
@@ -34,8 +35,10 @@ function scrrsz() {
     // console.log("Width: " + WIDTH);
     // console.log("Height: " + HEIGHT);
 
-    if (WIDTH < 500) {
+    if (WIDTH <= 768) {
         input_teclado.style.display = "block";
+    } else {
+        input_teclado.style.display = "none";
     }
 
     limpiarPantalla();
@@ -47,6 +50,13 @@ function imprimeJuegoActual() {
     dibujaLetrasAciertos(HEIGHT / 2 + 65);
     dibujaLetrasErrores(HEIGHT / 2 + 150);
     dibujaGuionesPalabra(HEIGHT / 2 + 80);
+    if (ERRORES == 10) {
+        // console.log("Perdiste!");
+        dibujaLetrasResultado(HEIGHT / 2 + 200, "Perdiste!", "orange");
+    } else if (GANASTE) {
+        // console.log("Ganaste!");
+        dibujaLetrasResultado(HEIGHT / 2 + 200, "Ganaste!", "yellow");
+    }
 }
 
 async function juegoNuevo() {
@@ -124,6 +134,14 @@ ap_cancelar.addEventListener('click', function handleClick() {
     pantallaInicial();
 });
 
+input_teclado.addEventListener('focus', (event) => {
+    footer.style.display = "none";
+});
+
+input_teclado.addEventListener('focusout', (event) => {
+    footer.style.display = "block";
+});
+
 
 agregarpalabra.addEventListener('click', function handleClick() {
     div_botones.style.display = "none";
@@ -162,13 +180,6 @@ document.addEventListener('keyup', e => {
 
         input_teclado.value = "";
         imprimeJuegoActual();
-        if (ERRORES == 10) {
-            // console.log("Perdiste!");
-            dibujaLetrasResultado(HEIGHT / 2 + 200, "Perdiste!", "orange");
-        } else if (GANASTE) {
-            // console.log("Ganaste!");
-            dibujaLetrasResultado(HEIGHT / 2 + 200, "Ganaste!", "yellow");
-        }
     }
 });
 
