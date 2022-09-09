@@ -1,4 +1,9 @@
-# Juego del Ahorcado HTML, Canvas (ONE) 🚀🚀🚀
+# ONE – Oracle Next Education | Alura Latam 🎒
+
+## Challenge ONE Sprint 02:
+### Sprint 02: Crea tu propio juego del ahorcado con Javascript
+<hr>
+<br>
 
 [https://www.rafaelvilches.codes/ahorcado/](https://www.rafaelvilches.codes/ahorcado/)
 
