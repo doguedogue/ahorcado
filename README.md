@@ -5,7 +5,7 @@
 <hr>
 <br>
 
-[https://www.rafaelvilches.codes/ahorcado/](https://www.rafaelvilches.codes/ahorcado/)
+[https://www.rafaelvilches.codes/ahorcado/](https://www.rafaelvilches.codes/ahorcado/) 🌐
 
 
 
